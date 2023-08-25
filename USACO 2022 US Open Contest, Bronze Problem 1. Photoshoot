@@ -1,0 +1,64 @@
+//KUMAR AKSHAT IOI GOLD MEDALLIST
+#include <bits/stdc++.h>
+
+using namespace std;
+#define int long long
+#define endl '\n'
+const int mod = 1000 * 1000 * 1000 + 7;
+const int N = 100005;
+mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
+
+signed main() {
+    auto begin = std::chrono::high_resolution_clock::now();
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+
+
+    int n; cin>>n;
+    string s; cin>>s;
+    string a;
+    for(int i  = 0 ; i < s.size() ; i+=2){
+        if (s[i]=='H' && s[i+1] == 'G'){
+            if (a.size() == 0 || a.back()=='A'){
+                a+='B';
+            }
+        }
+        if (s[i]=='G' && s[i+1]=='H'){
+            if (a.size()==0 || a.back()=='B'){
+                a+='A';
+            }
+        }
+    }
+    if (a.back()=='B'){
+        a.pop_back();
+    }
+    cout<<a.size()<<endl;
+
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
+    return 0;
+}
+
+/*. if the two characters are equal
+A if the substring is GH
+B if the substring is HG
+
+our string always ends with A
+there may be 2 cases that the length is odd or the length is even
+let's first take odd length
+ABABA
+BBABA (1st op, till ind 1)
+AAABA (2nd op, till ind 2)
+BBBBA (3rd op, till ind 3)
+AAAAA (4th op, till ind 4)
+BBBBB (5th op, till ind 5)
+Now let's take take even length string
+BABA
+AABA (1st op, ind 1)
+BBBA(2nd op, ind 2)
+AAAA(3rd op, ind 3)
+BBBB(4th op, ind 4)
+in your problem HGHGGH, which is BBA or BA
+we first did it AA, than made it BB*/
