@@ -1,0 +1,82 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+#define int long long
+#define INF (int)1e18
+#define endl '\n'
+const int mod = 1000 * 1000 * 1000 + 7;
+const int N = 100005;
+#define f first
+#define s second
+
+mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
+int x[N] , y[N] , p[N];
+int n;
+bool check (int i , int j){
+    if (((abs(x[i]-x[j])*abs(x[i]-x[j]))+ (abs(y[i]-y[j])*abs(y[i]-y[j]) ) ) <= (p[i] * p[i])){return true;}
+    return false;
+}
+bool visited[N] = {false};
+int ct = 0;
+vector<int> adj[N];
+void dfs(int u){
+    if (!visited[u]){
+        visited[u] = true;
+        ct++;
+        for(auto &v : adj[u]){
+            if (!visited[v])
+                dfs(v);
+        }
+    }
+}
+
+void reset(){
+    for (int i = 0; i < 205 ; ++i) {
+        visited[i] = false;
+    }
+}
+
+void Solve() {
+    cin>>n;
+    for (int i = 0; i < n; ++i) {
+        cin>>x[i]>>y[i]>>p[i];
+    }
+    for(int i = 0; i < n ; i++){
+        for(int j = 0 ; j< n ; j++){
+            if (check(i , j) &&i!=j){
+                adj[i].push_back(j);
+                //cout<<i<<" "<<j<<endl;
+            }
+        }
+    }
+    int ans = 0;
+    for (int i = 0; i < n; ++i) {
+        dfs(i);
+        ans = max(ans,ct);
+        ct = 0;
+        reset();
+    }
+    cout<<ans<<endl;
+}
+
+int32_t main() {
+    auto begin = std::chrono::high_resolution_clock::now();
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+
+#ifndef ONLINE_JUDGE
+    freopen("moocast.in", "r", stdin);
+    freopen("moocast.out", "w", stdout);
+#endif
+
+    int t = 1;
+    //   cin >> t;
+    for (int i = 1; i <= t; i++) {
+        //cout << "Case #" << i << ": ";
+        Solve();
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
+    return 0;
+}
