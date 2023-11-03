@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+#define int long long
+#define INF (int)1e18
+#define endl '\n'
+const int mod = 1000 * 1000 * 1000 + 7;
+const int N = 100005;
+int po = 1000000;
+
+
+mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
+
+vector<tuple<int,int,int> > adj[N];
+
+void Solve() {
+    int n , m; cin>>n>>m;
+    for (int i = 0; i < m; ++i) {
+        int a , b , c , f;
+        cin>>a>>b>>c>>f;
+        adj[a].push_back({b,c,f});//node: adj node , cost ,flow
+        adj[b].push_back({a,c,f});
+    }
+    vector<int> ans(n+1,-1e9); //flow 1 to i;
+    priority_queue<tuple<int,int,int> , vector<tuple<int,int,int>> , greater<>> q;
+    //cost , flow rate , node
+    q.push({0,mod,1}); //milk stay at postion 1
+    ans[1] = 0;
+    while (!q.empty()){
+        tuple<int,int,int> v = q.top();
+        q.pop();
+        int cost = get<0>(v);
+        int flow = get<1> (v);
+        int cn = get<2>(v) ; //current node
+        for(auto[tn , tc , tf ] : adj[cn]){
+           int mf = min(tf,flow);
+            if (ans[tn]< ((mf*po)/(cost+tc))) {
+                ans[tn] = ((mf*po)/(cost+tc));
+                q.push({cost+tc, mf , tn});
+            }
+        }
+    }
+    cout<<ans[n]<<endl;
+
+}
+
+int32_t main() {
+    auto begin = std::chrono::high_resolution_clock::now();
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+
+#ifndef ONLINE_JUDGE
+    freopen("pump.in", "r", stdin);
+    freopen("pump.out", "w", stdout);
+#endif
+
+    int t = 1;
+   // cin >> t;
+    for (int i = 1; i <= t; i++) {
+        //cout << "Case #" << i << ": ";
+        Solve();
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
+    return 0;
+}
